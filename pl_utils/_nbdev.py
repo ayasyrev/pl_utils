@@ -2,12 +2,12 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"pl_verion": "00_utils.ipynb"}
+index = {"pl_version": "00_utils.ipynb"}
 
 modules = ["utils.py"]
 
-doc_url = "https://ayasyrev.github.io/pl_util/"
+doc_url = "https://ayasyrev.github.io/pl_utils/"
 
-git_url = "https://github.com/ayasyrev/pl_util/tree/master/"
+git_url = "https://github.com/ayasyrev/pl_utils/tree/master/"
 
 def custom_doc_links(name): return None

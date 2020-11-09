@@ -16,6 +16,6 @@ entries:
       title: Title
       url: tst.html
     output: web
-    title: pl_util
+    title: pl_utils
   output: web
   title: Sidebar
