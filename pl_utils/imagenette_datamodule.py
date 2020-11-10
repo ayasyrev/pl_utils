@@ -20,6 +20,9 @@ imagenette_len = {'imagenette2': {'train': 1000, 'val': 1000},
                   'imagewoof2': {'train': 9025, 'val': 3929}
                   }
 
+imagenette_md5 = {'imagenette2': '43b0d8047b7501984c47ae3c08110b62',
+                  'imagewoof2': '5eaf5bbf4bf16a77c616dc6e8dd5f8e9'}
+
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                  std=[0.229, 0.224, 0.225])
 
@@ -36,15 +39,11 @@ class ImagenetteDataModule(LightningDataModule):
             image_size: int = 192,
             num_workers: int = 4,
             batch_size: int = 32,
-            woof: bool = False,
-            # *args,
-            # **kwargs,
-    ):
+            woof: bool = False,):
         '''
         Args:
             data_dir: path to datafolder
         '''
-        # super().__init__(*args, **kwargs)
         super().__init__()
         self.image_size = image_size
         self.dims = (3, self.image_size, self.image_size)
@@ -60,8 +59,6 @@ class ImagenetteDataModule(LightningDataModule):
     def _data_exists(self) -> bool:
         ''' Verify data at root and return True if len of images is Ok.
         '''
-        # dataset_len = {'train': 9025, 'val': 3929}
-        # num_classes = 10
         if not self.root.exists():
             return False
 
@@ -69,22 +66,20 @@ class ImagenetteDataModule(LightningDataModule):
             split_path = Path(self.root, split)
             if not self.root.exists():
                 return False
-                # raise FileNotFoundError(f"Directory {split_path} not exist")
+
             classes_dirs = [dir_entry for dir_entry in os.scandir(split_path)
                             if dir_entry.is_dir()]
             if self.num_classes != len(classes_dirs):
                 return False
-                # warn(f"{num_classes} dirs expected, but has {len(classes_dirs)} dirs.")
 
             num_samples = 0
             for dir_entry in classes_dirs:
                 num_samples += len([fn for fn in os.scandir(dir_entry)
                                     if fn.is_file()])
-            # if num_samples != dataset_len[split]:
+
             if num_samples != imagenette_len[self.name][split]:
                 return False
-            #    warn(f"Expected {imagenette_len[self.name][split]} items {split} dirs, \
-            #         but has {num_samples} item.")
+
         return True
 
     def prepare_data(self):
@@ -92,7 +87,7 @@ class ImagenetteDataModule(LightningDataModule):
         """
         if not self._data_exists():
             dataset_url = imagenette_urls[self.name]
-            download_and_extract_archive(url=dataset_url, download_root=self.data_dir)
+            download_and_extract_archive(url=dataset_url, download_root=self.data_dir, md5=imagenette_md5[self.name])
 
     def setup(self, stage=None):
         train_transforms = self.train_transform() if self.train_transforms is None else self.train_transforms
@@ -168,15 +163,11 @@ class ImageWoofDataModule(ImagenetteDataModule):
             data_dir: str = DATADIR,
             image_size: int = 192,
             num_workers: int = 4,
-            batch_size: int = 32,
-            # *args,
-            # **kwargs,
-    ):
+            batch_size: int = 32):
         '''
         Args:
             data_dir: path to datafolder
         '''
-        # super().__init__(*args, **kwargs)
         super().__init__(woof=True,
                          data_dir=data_dir,
                          image_size=image_size,
