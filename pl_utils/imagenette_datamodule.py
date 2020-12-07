@@ -16,7 +16,7 @@ DATADIR = Path('data/')
 imagenette_urls = {'imagenette2': 'https://s3.amazonaws.com/fast-ai-imageclas/imagenette2.tgz',
                    'imagewoof2': 'https://s3.amazonaws.com/fast-ai-imageclas/imagewoof2.tgz'}
 
-imagenette_len = {'imagenette2': {'train': 1000, 'val': 1000},
+imagenette_len = {'imagenette2': {'train': 9469, 'val': 3925},
                   'imagewoof2': {'train': 9025, 'val': 3929}
                   }
 
