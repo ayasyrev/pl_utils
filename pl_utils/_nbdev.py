@@ -2,9 +2,9 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"pl_version": "00_utils.ipynb"}
+index = {}
 
-modules = ["utils.py"]
+modules = []
 
 doc_url = "https://ayasyrev.github.io/pl_utils/"
 
