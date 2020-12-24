@@ -12,19 +12,19 @@ Imagenette dataset Datamodule.
 Subset of ImageNet.  
 https://github.com/fastai/imagenette  
 
-```python
+```
 from pl_utils.imagenette_datamodule import ImagenetteDataModule, ImageWoofDataModule
 ```
 
-```python
+```
 imagenette_datamodule = ImagenetteDataModule(data_dir=DATADIR)
 ```
 
-```python
+```
 imagenette_datamodule.setup()
 ```
 
-```python
+```
 len(imagenette_datamodule.train_dataset), len(imagenette_datamodule.val_dataset)
 ```
 
@@ -35,15 +35,15 @@ len(imagenette_datamodule.train_dataset), len(imagenette_datamodule.val_dataset)
 
 
 
-```python
+```
 woof_datamodule = ImageWoofDataModule(data_dir=DATADIR)
 ```
 
-```python
+```
 woof_datamodule.setup()
 ```
 
-```python
+```
 len(woof_datamodule.train_dataset), len(woof_datamodule.val_dataset)
 ```
 

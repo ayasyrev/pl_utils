@@ -55,7 +55,7 @@ def check_data_exists(root, name) -> bool:
     return True
 
 
-def train_transform(image_size, train_img_scale=(0.35, 1)):
+def train_transforms(image_size, train_img_scale=(0.35, 1)):
     """
     The standard imagenet transforms: random crop, resize to self.image_size, flip.
     Scale factor by default as at fast.ai example train script.
@@ -69,7 +69,7 @@ def train_transform(image_size, train_img_scale=(0.35, 1)):
 
     return preprocessing
 
-def val_transform(image_size, extra_size=32):
+def val_transforms(image_size, extra_size=32):
     """
     The standard imagenet transforms for validation: central crop, resize to self.image_size.
     """
@@ -88,19 +88,24 @@ class ImagenetteDataModule(LightningDataModule):
     https://github.com/fastai/imagenette
     '''
 
-    def __init__(
-            self,
-            data_dir: str = DATADIR,
+    def __init__(self,
+                 data_dir: str = DATADIR,
+                 image_size: int = 192,
+                 num_workers: int = 4,
+                 batch_size: int = 32,
+                 woof: bool = False,
+                 train_transforms = train_transforms,
+                 val_transforms = val_transforms,
+                 ):
+        '''
+        Args:
+            data_dir: path to datafolder
             image_size: int = 192,
             num_workers: int = 4,
             batch_size: int = 32,
             woof: bool = False,
-            train_transforms: Union[None, List] = None,
-            val_transforms: Union[None, List] = None,
-            ):
-        '''
-        Args:
-            data_dir: path to datafolder
+            train_transforms = train_transforms,
+            val_transforms = val_transforms,
         '''
         super().__init__()
         self.image_size = image_size
@@ -125,10 +130,10 @@ class ImagenetteDataModule(LightningDataModule):
             download_and_extract_archive(url=dataset_url, download_root=self.data_dir, md5=imagenette_md5[self.name])
 
     def setup(self, stage=None):
-        train_transforms = train_transform(self.image_size, self.train_img_scale) if self.train_transforms is None else self.train_transforms
-        self.train_dataset = ImageFolder(root=Path(self.root, 'train'), transform=train_transforms)
-        val_transforms = val_transform(self.image_size) if self.val_transforms is None else self.val_transforms
-        self.val_dataset = ImageFolder(root=Path(self.root, 'val'), transform=val_transforms)
+        self.train_dataset = ImageFolder(root=Path(self.root, 'train'),
+                                         transform=self.train_transforms(self.image_size, self.train_img_scale))
+        self.val_dataset = ImageFolder(root=Path(self.root, 'val'),
+                                       transform=self.val_transforms(self.image_size))
 
     def train_dataloader(self):
         """
@@ -167,22 +172,14 @@ class ImageWoofDataModule(ImagenetteDataModule):
     https://github.com/fastai/imagenette
     '''
 
-    def __init__(
-            self,
-            data_dir: str = DATADIR,
-            image_size: int = 192,
-            num_workers: int = 4,
-            batch_size: int = 32,
-            train_transforms: Union[None, List] = None,
-            val_transforms: Union[None, List] = None,):
+    def __init__(self, *args, **kwargs):
         '''
         Args:
             data_dir: path to datafolder
+            image_size: int = 192,
+            num_workers: int = 4,
+            batch_size: int = 32,
+            train_transforms = train_transforms,
+            val_transforms = val_transforms,
         '''
-        super().__init__(woof=True,
-                         data_dir=data_dir,
-                         image_size=image_size,
-                         num_workers=num_workers,
-                         batch_size=batch_size,
-                         train_transforms=train_transforms,
-                         val_transforms=val_transforms)
+        super().__init__(woof=True, *args, **kwargs)
