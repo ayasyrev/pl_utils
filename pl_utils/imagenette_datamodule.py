@@ -11,8 +11,8 @@ from pytorch_lightning import LightningDataModule
 
 __all__ = ['ImagenetteDataModule']
 
-# DATADIR = Path('data/imagewoof2/')
-DATADIR = Path('data/')
+# Path to directory with datasets. Name for Imagenette dataset nedd to be (will be) as imagenette2 or imagewoof2
+DATADIR = Path('data/')  
 
 imagenette_urls = {'imagenette2': 'https://s3.amazonaws.com/fast-ai-imageclas/imagenette2.tgz',
                    'imagewoof2': 'https://s3.amazonaws.com/fast-ai-imageclas/imagewoof2.tgz'}
@@ -58,6 +58,7 @@ def check_data_exists(root, name) -> bool:
 def train_transform(image_size, train_img_scale=(0.35, 1)):
     """
     The standard imagenet transforms: random crop, resize to self.image_size, flip.
+    Scale factor by default as at fast.ai example train script.
     """
     preprocessing = T.Compose([
         T.RandomResizedCrop(image_size, scale=train_img_scale),
@@ -68,12 +69,12 @@ def train_transform(image_size, train_img_scale=(0.35, 1)):
 
     return preprocessing
 
-def val_transform(image_size):
+def val_transform(image_size, extra_size=32):
     """
     The standard imagenet transforms for validation: central crop, resize to self.image_size.
     """
     preprocessing = T.Compose([
-        T.Resize(image_size + 32),
+        T.Resize(image_size + extra_size),
         T.CenterCrop(image_size),
         T.ToTensor(),
         normalize,
