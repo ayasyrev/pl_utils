@@ -13,8 +13,8 @@ entries:
       title: pl_utils
       url: utils.html
     - output: web,pdf
-      title: Title
-      url: tst.html
+      title: Imagenette datamodules
+      url: Imagenette_Datamodule.html
     output: web
     title: pl_utils
   output: web
