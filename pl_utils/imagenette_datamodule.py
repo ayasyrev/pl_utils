@@ -86,6 +86,15 @@ class ImagenetteDataModule(LightningDataModule):
     '''Imagenette dataset Datamodule.
     Subset of ImageNet.
     https://github.com/fastai/imagenette
+
+    Args:
+            data_dir: path to datafolder  
+            image_size: int = 192  
+            num_workers: int = 4  
+            batch_size: int = 32  
+            woof: bool = False  
+            train_transforms = train_transforms  
+            val_transforms = val_transforms  
     '''
 
     def __init__(self,
@@ -97,16 +106,6 @@ class ImagenetteDataModule(LightningDataModule):
                  train_transforms = train_transforms,
                  val_transforms = val_transforms,
                  ):
-        '''
-        Args:
-            data_dir: path to datafolder
-            image_size: int = 192,
-            num_workers: int = 4,
-            batch_size: int = 32,
-            woof: bool = False,
-            train_transforms = train_transforms,
-            val_transforms = val_transforms,
-        '''
         super().__init__()
         self.image_size = image_size
         self.dims = (3, self.image_size, self.image_size)
